@@ -55,3 +55,15 @@ Complete reset:
 1. Readable: Read data sequentially
 3. Duplex: Read and write data sequentially
 4. Transform: Modify data when writing or reading
+
+## HTTP
+
+### Ports
+- Communication endpoints
+- Specific ports have a specific purpose
+- For HTTP: port 80
+- For HTTPS: port 443
+
+### Response Objects
+- Must always use `res.end()` to signal to the server that all response headers and body have been sent
+- Otherwise, the clietn will keep waiting for a response!
