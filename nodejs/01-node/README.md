@@ -42,4 +42,16 @@ Complete reset:
 
 ## Nodemon
 - Watches files and restart the app for us
-- 
+
+## Event-Driven Programming
+- Flow of the program depends at least in part on the events that occur as the program executes
+- Listen for specific events and register (callback) functions that execute in response to those events
+
+## Streams
+- Used to read or write sequentially to/from a continuous source or a big file
+- Extend the EventEmitter class
+
+1. Writeable: Write data sequentially
+1. Readable: Read data sequentially
+3. Duplex: Read and write data sequentially
+4. Transform: Modify data when writing or reading
