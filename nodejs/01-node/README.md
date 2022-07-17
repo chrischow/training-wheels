@@ -1,4 +1,4 @@
-# Fundamentals
+# Node.js Fundamentals
 
 ## Running Code
 Use `node app` or `node app.js` if your script is `app.js`.

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Test App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+  </head>
+  <body>
+    <h1>Login Form</h1>
+    <form action="/login" method="POST">
+      <label for="name">Enter name:</label>
+      <input type="text" name="name" id="name" autocomplete="false" />
+      <button type="submit">Submit</button>
+    </form>
+    <br>
+    <h2>JavaScript Form</h2>
+    <form action="/login">
+      <label for="namejs">Enter name:</label>
+      <input type="text" name="namejs" id="namejs" autocomplete="false" />
+      <button type="submit" id="submit">Submit</button>
+    </form>
+    <script type="text/javascript">
+      const btn = document.querySelector('#submit');
+      const input = document.querySelector('#namejs');
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const nameVal = input.value;
+        try {
+          const { data } = await fetch('/api/people', {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            body: JSON.stringify({name: nameVal})
+          });
+        } catch(error) {
+          alert(error);
+        }
+        input.value = '';
+      });
+    </script>
+  </body>
+</html>

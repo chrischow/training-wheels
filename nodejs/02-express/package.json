@@ -1,0 +1,15 @@
+{
+  "name": "node-express",
+  "version": "1.0.0",
+  "description": "Code and notes for Express module of course",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CC",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
