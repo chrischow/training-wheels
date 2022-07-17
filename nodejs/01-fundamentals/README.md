@@ -34,3 +34,12 @@ Use `node app` or `node app.js` if your script is `app.js`.
   })
   ```
 
+## npm
+Complete reset:
+- Remove node_modules folder
+- Remove `package-lock.json`
+- Run `npm install`
+
+## Nodemon
+- Watches files and restart the app for us
+- 
