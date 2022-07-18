@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const taskRouter = require('./routes/tasks');
 const connectDb = require('./db/connect');
+const notFound = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
 
 const app = express();
 
@@ -10,16 +12,15 @@ app.use(express.static('./public'));
 app.use(express.json());
 app.use('/api/v1/tasks', taskRouter);
 
+// Home
 app.get('/', (req, res) => {
-  res.status(200).send('Hello');
+  res.status(200).send('Welcome to the Task Manager API.');
 });
 
-// Routes
-// app.get('/api/v1/tasks')
-// app.post('/api/v1/tasks')
-// app.get('/api/v1/tasks/:id')
-// app.patch('/api/v1/tasks/:id')
-// app.delete('/api/v1/tasks/:id')
+// Handle errors
+// Place this AFTER the routes
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 // Start server
 const startServer = async () => {

@@ -1,71 +1,48 @@
 const Task = require('../models/Task');
+const asyncWrapper = require('../middleware/async');
+const { createCustomError } = require('../errors/custom-error');
 
-const wrapper = (main, handleError) => {
-  try {
-    main();
-  } catch (err) {
-    handleError(err);
-  }
-}
+const getAllTasks = asyncWrapper(async (req, res) => {
+  const tasks = await Task.find({}, { '__v': 0 });
+  return res.status(200).json({ tasks });
+});
 
-const getAllTasks = async (req, res) => {
-  try {
-    const data = await Task.find({}, { '__v': 0 });
-    return res.status(200).json({ success: true, data });
-  } catch (err) {
-    return res.status(500).json({ success: false, ...err });
-  }
-}
+const createTask = asyncWrapper(async (req, res) => {
+  const task = await Task.create(req.body);
+  return res.status(201).json({ task });
+});
 
-const createTask = async (req, res) => {
-  try {
-    const task = await Task.create(req.body);
-    return res.status(201).json({ task });
-  } catch (err) {
-    return res.status(500).json({ success: false, ...err });
+const getTask = asyncWrapper(async (req, res, next) => {
+  const { id } = req.params;
+  const task = await Task.findOne({ '_id': id }, { '__v': 0 });
+  if (!task) {
+    const error = createCustomError('Task does not exist.', 404);
+    return next(error);
   }
-}
+  return res.status(200).json({ task });
+});
 
-const getTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const task = await Task.findOne({ '_id': id }, { '__v': 0 });
-    if (!task) {
-      return res.status(404).json({ success: false, message: 'Task does not exist.' })
-    }
-    return res.status(200).json({ success: true, data: {task: task} });
-  } catch (err) {
-    return res.status(500).json({ success: false, ...err });
+const updateTask = asyncWrapper(async (req, res) => {
+  const { id } = req.params;
+  const task = await Task.findOneAndUpdate({ '_id': id }, req.body, {
+    new: true, runValidators: true
+  });
+  if (!task) {
+    const error = createCustomError('Task does not exist.', 404);
+    return next(error);
   }
-}
+  return res.status(200).json({ task });
+});
 
-const updateTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const task = await Task.updateOne({ '_id': id }, req.body, {
-      new: true, runValidators: true
-    });
-    if (!task) {
-      return res.status(404).json({ success: false, message: 'Task does not exist.' })
-    }
-    return res.status(200).json({ success: true, message: 'Successfully updated task.', data: task });
-  } catch (err) {
-    return res.status(500).json({ success: false, ...err });
+const deleteTask = asyncWrapper(async (req, res) => {
+  const { id } = req.params;
+  const task = await Task.findOneAndDelete({ '_id': id });
+  if (!task) {
+    const error = createCustomError('Task does not exist.', 404);
+    return next(error);
   }
-}
-
-const deleteTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const task = await Task.findOneAndDelete({ '_id': id });
-    if (!task) {
-      return res.status(404).json({ success: false, message: 'Task does not exist.' })
-    }
-    return res.status(200).json({ success: true, message: 'Successfully deleted task.' });
-  } catch (err) {
-    return res.status(500).json({ success: false, ...err });
-  }
-}
+  return res.status(200).json({ message: 'Successfully deleted task.' });
+});
 
 module.exports = {
   getAllTasks,
